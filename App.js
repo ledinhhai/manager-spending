@@ -4,9 +4,10 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import HomeScreen from './screens/HomeScreen';
 import TabsScreen from './screens/TabsScreen';
 import LoginScreen from './screens/LoginScreen';
-import { createSwitchNavigator } from 'react-navigation';
+import  Navigation  from './navigation/AppNavigator';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import store from './store';
+
 import * as firebase from 'firebase';
 
 // Initialize Firebase
@@ -19,8 +20,6 @@ const config = {
   messagingSenderId: "132199761220"
 };
 firebase.initializeApp(config);
-
-
 
 export default class App extends React.Component {
   state = {
@@ -35,21 +34,8 @@ export default class App extends React.Component {
     })
   }
 
-  createRootNavigator(signedIn = false){
-    return createSwitchNavigator({
-      Dashboard: {
-        screen: TabsScreen
-      },
-      Login: {
-        screen: LoginScreen
-      },
-    }, {
-        navigationOptions: ({ navigation }) => ({ header: false }),
-        initialRouteName: signedIn ? "Dashboard" : "Login"
-      });
-  };
   render() {
-    const { isLoadingComplete, signedIn } = this.state;
+    const { isLoadingComplete } = this.state;
     if (!isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -61,10 +47,7 @@ export default class App extends React.Component {
     } else {
       return (
         <Provider store={store}>
-          <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            {this.createRootNavigator(signedIn)}
-          </View>
+          <Navigation />
         </Provider>
       );
     }

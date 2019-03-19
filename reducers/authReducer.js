@@ -1,1 +1,1 @@
-export default (state, action) => true;
+export default (theDefaultReducer = (state = 0, action) => state)

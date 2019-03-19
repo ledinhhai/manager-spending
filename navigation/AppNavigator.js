@@ -1,10 +1,33 @@
-import React from 'react';
-import { createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import React,{ Component} from 'react';
+import DoashboardScreen from '../screens/DoashboardScreen';
+import LoginScreen from '../screens/LoginScreen'
+import { connect } from 'react-redux'
 
-import MainTabNavigator from './MainTabNavigator';
+export const Navigator = createSwitchNavigator({
+  Login: {
+    screen: LoginScreen
+  },
+  Dashboard: {
+    screen: DoashboardScreen
+  }
+})
+const Navigation = createAppContainer(Navigator);
+// export default Navigation;
 
-export default createSwitchNavigator({
-  // You could add another route here for authentication.
-  // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-  Main: MainTabNavigator,
-});
+// class Navigation extends Component {
+//   render() {
+//       return(
+//           <Navigator/>
+//       )
+//   }
+// }
+
+const mapStateToProps = (state) => {
+  return ({
+      navigationState: state.NavigationReducer // NavigationReducer contains the navigation state of the app
+  })
+}
+
+
+export default connect(mapStateToProps)(Navigation)
